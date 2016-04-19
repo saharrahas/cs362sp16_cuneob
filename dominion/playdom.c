@@ -3,17 +3,19 @@
 #include "rngs.h"
 #include <stdlib.h>
 
+//-f $makefile $target
+
 int main (int argc, char** argv) {
   struct gameState G;
   struct gameState *p = &G;
 
-  int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse, 
+  int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
 	       sea_hag, tribute, smithy};
 
   printf ("Starting game.\n");
-  
+
   initializeGame(2, k, atoi(argv[1]), p);
-  
+
   int money = 0;
   int smithyPos = -1;
   int adventurerPos = -1;
@@ -41,8 +43,8 @@ int main (int argc, char** argv) {
 
     if (whoseTurn(p) == 0) {
       if (smithyPos != -1) {
-        printf("0: smithy played from position %d\n", smithyPos); 
-	playCard(smithyPos, -1, -1, -1, p); 
+        printf("0: smithy played from position %d\n", smithyPos);
+	playCard(smithyPos, -1, -1, -1, p);
 	printf("smithy played.\n");
 	money = 0;
 	i=0;
@@ -64,20 +66,20 @@ int main (int argc, char** argv) {
       }
 
       if (money >= 8) {
-        printf("0: bought province\n"); 
+        printf("0: bought province\n");
         buyCard(province, p);
       }
       else if (money >= 6) {
-        printf("0: bought gold\n"); 
+        printf("0: bought gold\n");
         buyCard(gold, p);
       }
       else if ((money >= 4) && (numSmithies < 2)) {
-        printf("0: bought smithy\n"); 
+        printf("0: bought smithy\n");
         buyCard(smithy, p);
         numSmithies++;
       }
       else if (money >= 3) {
-        printf("0: bought silver\n"); 
+        printf("0: bought silver\n");
         buyCard(silver, p);
       }
 
@@ -87,13 +89,13 @@ int main (int argc, char** argv) {
     else {
       if (adventurerPos != -1) {
         printf("1: adventurer played from position %d\n", adventurerPos);
-	playCard(adventurerPos, -1, -1, -1, p); 
+	playCard(adventurerPos, -1, -1, -1, p);
 	money = 0;
 	i=0;
 	while(i<numHandCards(p)){
 	  if (handCard(i, p) == copper){
 	    playCard(i, -1, -1, -1, p);
-	    money++;         
+	    money++;
 	  }
 	  else if (handCard(i, p) == silver){
 	    playCard(i, -1, -1, -1, p);
@@ -124,12 +126,12 @@ int main (int argc, char** argv) {
 	    buyCard(silver, p);
       }
       printf("1: endTurn\n");
-      
-      endTurn(p);      
+
+      endTurn(p);
     }
 
       printf ("Player 0: %d\nPlayer 1: %d\n", scoreFor(0, p), scoreFor(1, p));
-	    
+
   } // end of While
 
   printf ("Finished game.\n");

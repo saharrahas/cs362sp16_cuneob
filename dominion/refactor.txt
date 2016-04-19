@@ -1,0 +1,48 @@
+
+
+Re-factor Summary:
+
+The card effect code for each of the following cards has been moved out of
+the function cardEffect() and into their own, compartmentalized functions:
+
+    - adventurer
+    - council_room
+    - feast
+    - gardens
+    - mine
+    - remodel
+    - smithy
+    - village
+    - baron
+    - great_hall
+    - minion
+    - steward
+
+each of these functions have a name conforming to the following format:
+
+    <cardName>_effect(...)
+
+
+
+Notes/Details:
+
+
+- Included, though commented out, are some empty functions corresponding to each
+  of the rest of the card effects that have not yet been factored out of the
+  function cardEffect().
+
+- All pre-existing variables that were originally used in each case body in
+  cardEffect() are now passed in to their corresponding function
+
+- All function parameter names used in the refactored card effects are consistent
+  with the original variables used by the function cardEffect(), in order to avoid
+  any confusion.
+
+- The temporary variables used in each case body have been recreated in each function
+  as needed and using the same names. All temporary variables that are no longer used
+  by any case bodies in cardEffect() as a result of the refactoring have been subsequently
+  removed.
+
+
+
+
