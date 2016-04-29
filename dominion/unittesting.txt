@@ -1,0 +1,15 @@
+Below is a brief summary of the coverage of individual tests as well as the tests as a whole:
+Unit Test 1: 18.83%
+Unit Test 2: 19.00%
+Unit Test 3: 22.28%
+Unit Test 4: 22.97%
+Card Test 1: 25.04%
+Card Test 2: 25.22%
+Card Test 3: 20.55%
+Card Test 4: 24.01%
+Overall: 37.31%
+
+	As can be seen with the coverage percentages, each test seems to cover a decent portion of the code for a single unit test, however they overall only cover 37.31% of the overall code. This indicative of a high amount of overlap between each of the tests. In fact, assuming that the two test cases with the largest test coverage would have to have a minimum of 7.25% of overlap.
+	As for why this overlap is so prevalent, it comes down to the specific structure of the program. The code in dominion.c consists of a small collection of “big-hitter” functions which can call a wide variety of specific functions for a specific job (for instance, the eldritch horror that is the cardEffect function). In order to get any sort of decent coverage out of these smaller functions, one has to specially call the larger functions in such a way as to call each of the many, smaller functions under their retainer. Being that I am only testing 4 cards and 4 other functions out of the large roster of functions available in dominion.c, I should only get a small section of the overall code. As for the overlap, every time any function or card needs to be tested, it is required for the game to be initialized, meaning that every test shares a common coverage of the game initialization function. Beyond this, every card test must work via the cardEffect function, meaning they all have common coverage through that function. This would seem to explain why the card tests seem to gain more coverage than the regular unit tests, as they have to work through more base code to get to the specific code that they are testing. 
+	In writing the unit tests, I was unsure what to fix and what not to. I was unsure whether or not errors in the code should be left in to demonstrate that the bugs were in fact there or if the bugs were to be removed to demonstrate my competency as a programmer. I elected to pick the middle road and removed bugs that made executing my tests untenable or caused the program to crash, but otherwise things are relatively untouched. Sorry in advance if this was not what was required. 
+	In any case, just writing these few unit tests, I’m already itching to get into automated testing because I want to be able to find bugs more effectively and without giving me carpel tunnel.

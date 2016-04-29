@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>
 
 int compare(const void* a, const void* b) {
   if (*(int*)a > *(int*)b)
@@ -20,7 +21,7 @@ struct gameState* newGame() {
 
 int* kingdomCards(int k1, int k2, int k3, int k4, int k5, int k6, int k7,
 		  int k8, int k9, int k10) {
-  int* k = malloc(10 * sizeof(int));
+  int* k = (int*)malloc(10 * sizeof(int));
   k[0] = k1;
   k[1] = k2;
   k[2] = k3;
@@ -34,7 +35,9 @@ int* kingdomCards(int k1, int k2, int k3, int k4, int k5, int k6, int k7,
   return k;
 }
 
-int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
+
+
+int initializeGame(int numPlayers, int*  kingdomCards, int randomSeed,
 		   struct gameState *state) {
 
   int i;
@@ -53,12 +56,16 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
   //set number of players
   state->numPlayers = numPlayers;
 
+
   //check selected kingdom cards are different
   for (i = 0; i < 10; i++)
     {
+      if(kingdomCards[i]<=province || kingdomCards[i]>treasure_map){
+	 return -1;
+      }
       for (j = 0; j < 10; j++)
         {
-	  if (j != i && kingdomCards[j] == kingdomCards[i])
+	  if ( j != i && kingdomCards[j] == kingdomCards[i]  )
 	    {
 	      return -1;
 	    }
@@ -318,6 +325,10 @@ int handCard(int handPos, struct gameState *state) {
 }
 
 int supplyCount(int card, struct gameState *state) {
+
+   if(card<0 || card>treasure_map){
+   	return -1;
+   }
   return state->supplyCount[card];
 }
 
@@ -359,6 +370,11 @@ int endTurn(struct gameState *state) {
   }
   state->handCount[currentPlayer] = 0;//Reset hand count
 
+
+  for(k=0; k<5; k++){
+     drawCard(currentPlayer,state);
+  }
+
   //Code for determining the player
   if (currentPlayer < (state->numPlayers - 1)){
     state->whoseTurn = currentPlayer + 1;//Still safe to increment
@@ -375,11 +391,6 @@ int endTurn(struct gameState *state) {
   state->playedCardCount = 0;
   state->handCount[state->whoseTurn] = 0;
 
-  //int k; move to top
-  //Next player draws hand
-  for (k = 0; k < 5; k++){
-    drawCard(state->whoseTurn, state);//Draw a card
-  }
 
   //Update money
   updateCoins(state->whoseTurn, state , 0);
@@ -556,8 +567,9 @@ int drawCard(int player, struct gameState *state)
 
     deckCounter = state->deckCount[player];//Create a holder for the deck count
 
-    if (deckCounter == 0)
+    if (deckCounter == 0){
       return -1;
+    }
 
     state->hand[player][count] = state->deck[player][deckCounter - 1];//Add card to hand
     state->deckCount[player]--;
@@ -852,7 +864,9 @@ int smithy_effect(int currentPlayer, struct gameState* state, int handPos){
     //+3 Cards
     int i;
     for (i = 0; i < 3; i++){
-    drawCard(currentPlayer, state);
+       if(drawCard(currentPlayer, state)==-1){
+          return -1;
+       }
     }
 
     //discard card from hand

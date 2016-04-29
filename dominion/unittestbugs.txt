@@ -1,0 +1,21 @@
+Unit Test 1: initializeGame
+•	Initializing a game with an array of Kingdom cards containing invalid card values was not only not caught, but results in a segmentation fault.
+Unit Test 2: supplyCount
+•	supplyCount does not check whether or not the index it is accessing is within proper bounds of the array it is referencing
+Unit Test 3: endTurn
+•	endTurn leaves the player whose turn is ending with no cards in their hand, making action cards which deal with what is in another players hand difficult if not impossible to execute
+•	endTurn deals a new hand to the player whose turn is next, rather to the player whose turn has ended, indicating somewhere during the development of this function, the original re-dealing for the person ending their turn may have been muddled with
+Unit Test 4: buyCard
+•	If someone attempts to purchase an item yet has insufficient funds, no error value is returned
+•	If someone attempts to purchase an item yet has insufficient funds, the card is not given to the player, however the player’s coins are decremented as if they had bought the card
+Card Test 1: smithy
+•	The smithy does not return an error code when there are no cards to draw
+Card Test 2: steward
+•	Using the steward to draw cards results in an improper number of cards being drawn
+•	Using the steward to gain coins results in an improper amount of money being added to the player’s coins
+Card Test 3: sea_hag
+•	Using the sea_hag under aparantly valid conditions results in an error code being returned
+•	Using the sea_hag will not cause curses to be placed in players with empty decks.
+Card Test 4: embargo
+•	[NONE]
+
