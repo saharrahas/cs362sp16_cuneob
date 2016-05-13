@@ -1,0 +1,33 @@
+As of this writing, all random test functions have 100% coverage of the card code that they are
+meant to cover. However, it should also be noted that the average amount of overall
+coverage offered by each random test is relatively comparable to the average coverage provided
+by the previously written unit tests. This being said, the random functions cover a
+significantly larger space of conditions compared to the unit tests and all in the course of 
+about 0.5 seconds, plus the random tests provide an accumulated total of each type of error
+that occurred for a given set of tests, which allows for one to draw correlations between
+errors. So, all things considered, the random tests are most likely better when it comes to
+routing out errors, especially those resulting from obfuscated border cases.
+
+In any case, the development of these random tests have driven me to develop more powerful
+testing tools. For instance, alongside all of the sourcefiles containing code for random and
+unit tests, there is the sourcefile dominiontestutilities.c, which contains a suite of funcions
+I made to streamline the development ofr future tests. Of particular note from that file are
+the functions messWithState and addAndPlay. The former of these takes an active game and
+randomly populates all active players and supplies with a new set of cards, and the latter
+allows a tester to simply have a player play a card of a certain type without having to deal
+with drawCard or playCard and without worrying about the phase or amount of actions left for
+the player.
+
+With these two functions, the main concern for testing cards was no longer whether or not a 
+wide variety of gamestates were being covered or whether or not the card could be played
+by the player. Instead, the two main concerns were testing a wide variety of valid values for
+choices when playing a card (where applicable), and interpreting the potentially quite large
+number of failures that could result from testing. To these ends, for any function which
+relied on additional choices by the player, I simply had to hand-code for the random selection
+of a valid option value and for the test to run different conditionals depending upon what
+choices have been made. In addition, to ensure that no infrequent errors get lost amidst the
+more frequent ones, I had the testing function return a series of binary flags inside an integer
+value, which would act to inform the main testing loop what errors have occured in a given test.
+From there, the main testing loop would tally up the number of errors that have occured for
+a given test condition, and each testing program would report the tallied number once all tests
+have been executed.
