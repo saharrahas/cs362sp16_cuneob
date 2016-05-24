@@ -36,6 +36,17 @@ int* kingdomCards(int k1, int k2, int k3, int k4, int k5, int k6, int k7,
 }
 
 
+void getCount (struct gameState* game){
+
+   int pos=0;
+   while(pos<game->numPlayers){
+      printf("\n    Player %d has %d cards",pos,game->handCount[pos]+game->deckCount[pos]+game->discardCount[pos]);
+      pos++;
+   }
+
+}
+
+
 
 int initializeGame(int numPlayers, int*  kingdomCards, int randomSeed,
 		   struct gameState *state) {
@@ -232,6 +243,7 @@ int shuffle(int player, struct gameState *state) {
     state->deckCount[player]++;
   }
 
+
   return 0;
 }
 
@@ -282,6 +294,7 @@ int buyCard(int supplyPos, struct gameState *state) {
     printf("Entering buyCard...\n");
   }
 
+
   // I don't know what to do about the phase thing.
 
   who = state->whoseTurn;
@@ -311,6 +324,7 @@ int buyCard(int supplyPos, struct gameState *state) {
 
   //state->discard[who][state->discardCount[who]] = supplyPos;
   //state->discardCount[who]++;
+  //
 
   return 0;
 }
@@ -363,6 +377,9 @@ int endTurn(struct gameState *state) {
   int i;
   int currentPlayer = whoseTurn(state);
 
+  
+  printf("\nGoing to discard\n");
+  
   //Discard hand
   for (i = 0; i < state->handCount[currentPlayer]; i++){
     state->discard[currentPlayer][state->discardCount[currentPlayer]++] = state->hand[currentPlayer][i];//Discard
@@ -370,10 +387,15 @@ int endTurn(struct gameState *state) {
   }
   state->handCount[currentPlayer] = 0;//Reset hand count
 
+  getCount(state);
+  printf("\nGoing to draw cards");
 
   for(k=0; k<5; k++){
      drawCard(currentPlayer,state);
   }
+
+  getCount(state);
+  printf("\nChanging the player");
 
   //Code for determining the player
   if (currentPlayer < (state->numPlayers - 1)){
@@ -389,8 +411,11 @@ int endTurn(struct gameState *state) {
   state->coins = 0;
   state->numBuys = 1;
   state->playedCardCount = 0;
-  state->handCount[state->whoseTurn] = 0;
+  //state->handCount[state->whoseTurn]=0;
 
+
+  getCount(state);
+  printf("\nUpdating the dank muns");
 
   //Update money
   updateCoins(state->whoseTurn, state , 0);
@@ -534,7 +559,10 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state) {
 }
 
 int drawCard(int player, struct gameState *state)
-{	int count;
+{
+
+
+  int count;
   int deckCounter;
   if (state->deckCount[player] <= 0){//Deck is empty
 

@@ -9,17 +9,16 @@
 int* getRandomKindomCards(){
 
     int* k = malloc(10 * sizeof(int));
-    srand(clock()+time(0));
 
     int pos=0;
     int checkPos;
     while(pos<10){
         checkPos=pos-1;
-        k[pos]=(rand())%treasure_map+1;
+        k[pos]=((int)(Random()*100))%(treasure_map-copper+1)+copper;
         while(checkPos>=0){
             if(k[checkPos]==k[pos]){
                 checkPos=pos-1;
-                k[pos]=(rand())%(treasure_map+1);
+                k[pos]=((int)(Random()*100))%(treasure_map-copper+1)+copper;
             }
             else{
                 checkPos--;
