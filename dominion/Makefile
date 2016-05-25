@@ -1,6 +1,6 @@
 CFLAGS = -Wall -fpic -coverage -lm
 
-all: playdom player unittestresults.out randomtestadventurer.out randomtestcard1.out randomtestcard2.out testdominion diffdominion
+all: playdom player unittestresults.out randomtestadventurer.out randomtestcard1.out randomtestcard2.out testdominion.out testdominion diffdominion
 
 .PHONY: dumbClean
 
@@ -62,6 +62,12 @@ randomtestcard2.out: randomtestcard2
 	gcov dominion.c >> randomtestcard2.out
 	cat dominion.c.gcov >> randomtestcard2.out
 
+testdominion.out: testdominion
+	rm -f *.gcda
+	testdominion 42 > testdominion.out
+	gcov testdominion.c >> testdominion.out
+	cat dominion.c.gcov >> testdominion.out
+
 
 
 unittest1: dominionTestUtilities.o
@@ -102,6 +108,7 @@ testdominion: dominionTestUtilities.o
 
 diffdominion: 
 	gcc -o diffdominion diffdominion.c $(CFLAGS)
+
 
 
 clean:

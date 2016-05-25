@@ -71,6 +71,16 @@ const char* sayCard(int theCard){
 }
 
 
+void getCount(struct gameState* game){
+   int pos=0;
+   while(pos<game->numPlayers){
+      printf("    Player %d has %d cards",pos,game->handCount[pos]+game->deckCount[pos]+game->discardCount[pos]);
+      pos++;
+   }
+}
+
+
+
 void buyCards(struct gameState* game){
 
     int done=0;

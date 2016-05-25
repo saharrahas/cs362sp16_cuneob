@@ -1,0 +1,57 @@
+When using my implementation of diffdominion to compare my version of 
+dominion to that of Yipeng Song, I immediately found a discrepency
+in the operation between our versions. The first seed I used, 24,
+started to have deviation in behavior once one of our implementations
+bought a copper card while the other did not. From there, the behaviors
+of the two began to split quickly as this single-card difference began
+to operate differently based off of their different distributions
+of cards. It would seem that, in Yipeng Song's implementation, the
+player's alloted number of buys does not decrease under certain
+circumstances, because this pattern of extra buy actions continues
+throughout the game as it is played.
+
+Of course, all of this is somewhat speculative, the extra copper could
+have been a random initial incident which sparked a chain reaction
+in Yipeng's implementation that resulted in an increased use of cards 
+which granted extra buy actions. Then again, all this time, I have
+been assuming Yipeng's implementation has been the one at fault while
+my implementation may very well not be giving the player enough buy
+actions, for some reason.  
+
+Such is a problem in differential testing: One may be able to tell
+that there is a difference between two systems, but that can leave
+little indication of why these differences arose and which version
+of a system is correct, if any of them are correct at all.
+
+Furthermore, when working with systems that have a lot of parts 
+interacting with one-another and over a long period of time (such
+as dominion) any small initial changes will almost invariably result
+in the butterfly effect, the development rapid deviations in twos 
+systems as small differences feed into larger and larger ones.
+
+While not inherently a bad testing method, it may be better used 
+upon less sensitive systems.
+
+
+After running the test code once with the same seed (42), but using
+the two implementations of dominion, these are the resulting
+coverage percentages:
+
+Yipeng's: 53.01%
+Mine: 53.01%
+
+I know, it's somewhat odd and almost a little suspicious to have
+identical percentages, especially considering that this is the very
+same seed that resulted in all the deviations and changes above. 
+I have recompiled both implementations multiple times, wiping the
+.gcda files every time, and still got the same percentages. I
+suppose this may be attributable to my code having a very solid coverage
+of a very specific swath of code, or perhaps chance. In all odds,
+it may just even be dumb luck. Nonetheless, we both have a very good
+coverage level for just a single test run, so it may just be good
+to not look a gift horse in the mouth.
+
+
+
+ 
+
