@@ -377,8 +377,7 @@ int endTurn(struct gameState *state) {
   int i;
   int currentPlayer = whoseTurn(state);
 
-  
-  printf("\nGoing to discard\n");
+ 
   
   //Discard hand
   for (i = 0; i < state->handCount[currentPlayer]; i++){
@@ -387,15 +386,11 @@ int endTurn(struct gameState *state) {
   }
   state->handCount[currentPlayer] = 0;//Reset hand count
 
-  getCount(state);
-  printf("\nGoing to draw cards");
 
   for(k=0; k<5; k++){
      drawCard(currentPlayer,state);
   }
 
-  getCount(state);
-  printf("\nChanging the player");
 
   //Code for determining the player
   if (currentPlayer < (state->numPlayers - 1)){
@@ -413,9 +408,6 @@ int endTurn(struct gameState *state) {
   state->playedCardCount = 0;
   //state->handCount[state->whoseTurn]=0;
 
-
-  getCount(state);
-  printf("\nUpdating the dank muns");
 
   //Update money
   updateCoins(state->whoseTurn, state , 0);
@@ -774,6 +766,7 @@ int feast_effect(int currentPlayer, struct gameState* state, int choice1){
             if (DEBUG){
                 printf("Cards Left: %d\n", supplyCount(choice1, state));
             }
+	    x=0;
         }
         else if (state->coins < getCost(choice1)){
             printf("That card is too expensive!\n");
@@ -781,6 +774,7 @@ int feast_effect(int currentPlayer, struct gameState* state, int choice1){
             if (DEBUG){
                 printf("Coins: %d < %d\n", state->coins, getCost(choice1));
             }
+	    x=0;
         }
         else{
 
@@ -1246,6 +1240,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	  state->numActions = state->numActions + 2;
 	}
       }
+
+      discardCard(handPos,currentPlayer,state,0);
 
       return 0;
 

@@ -1,12 +1,12 @@
 CFLAGS = -Wall -fpic -coverage -lm
 
-all: playdom player unittestresults.out randomtestadventurer.out randomtestcard1.out randomtestcard2.out testdominion
+all: playdom player unittestresults.out randomtestadventurer.out randomtestcard1.out randomtestcard2.out testdominion diffdominion
 
 .PHONY: dumbClean
 
 
 dumbClean:
-	rm -f *.o *.out *.gcov *.gcda *.gsno *.so *.a *.dSYM
+	rm -f *.o *.gcov *.gcda *.gsno *.so *.a *.dSYM
 
 
 -include dumbClean
@@ -100,7 +100,9 @@ randomtestcard2: dominionTestUtilities.o
 testdominion: dominionTestUtilities.o
 	gcc -o testdominion testdominion.c -g rngs.o dominionTestUtilities.o $(CFLAGS)
 
+diffdominion: 
+	gcc -o diffdominion diffdominion.c $(CFLAGS)
 
 
 clean:
-	rm -f *.o *.out *.exe playdom.exe playdom test.exe test player randomtestadventurer randomtestcard1 randomtestcard2 unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4 player.exe testInit testInit.exe *.gcov *.gcda *.gcno *.so *.a *.dSYM
+	rm -f *.o *.out *.exe playdom.exe playdom test.exe diffdominion testdiff1 testdiff2 test player randomtestadventurer randomtestcard1 randomtestcard2 unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4 player.exe testInit testInit.exe *.gcov *.gcda *.gcno *.so *.a *.dSYM

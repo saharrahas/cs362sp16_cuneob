@@ -121,7 +121,7 @@ void useCard(struct gameState* game){
     }
     while(game->hand[game->whoseTurn][handPos]<adventurer && tryCounter<10);
     if(tryCounter==10){
-       printf("Bluh");
+       printf("\nBluh");
        game->numActions--;
        return;
     }
@@ -226,7 +226,7 @@ void useCard(struct gameState* game){
             playCard(handPos,0,0,0,game);
     }
 
-    printf("\nPlayed card %s",sayCard(theCard));
+    printf("\nPlayed card %s, numActions is %d",sayCard(theCard),game->numActions);
 
 }
 
@@ -235,16 +235,20 @@ void useCard(struct gameState* game){
 void playATurn(struct gameState* game){
 
     while(game->numActions>0){
-        printf("Trying to use card");
         useCard(game);
-	getCount(game);
     }
-    printf("Trying to buy");
+    getCount(game);
+
     buyCards(game);
 
-    printf("Ending Turn");
+    printf("\nSupply Count:");
+    unsigned int pos=0;
+    while(pos<=treasure_map){
+    	printf("\n   %s: %d",sayCard(pos),supplyCount(pos,game));
+    	pos++;
+    }
+
     endTurn(game);
-    getCount(game);
 
 }
 
@@ -266,26 +270,13 @@ void playAGame(){
     gamePrint(game);
 
 
-    pos=-10000000;
-    while(pos<100000000){
-       pos++;
-    }
-
 
     while(isGameOver(game)==0){
-        pos=0;
-	while(pos<10000000){
-	   pos++;
-	}
-        printf("\n-----Next Turn-----");
+        printf("\n-----Next Turn-----\n");
         playATurn(game);
     }
     gamePrint(game);
-    pos=0;
-    while(pos<=treasure_map){
-       printf("\n  %s: %d",sayCard(pos),supplyCount(pos,game));
-       pos++;
-    }
+    
     free(game);
 
 }
