@@ -1,6 +1,6 @@
 CFLAGS = -Wall -fpic -coverage -lm
 
-all: playdom player unittestresults.out randomtestadventurer.out randomtestcard1.out randomtestcard2.out testdominion.out testdominion diffdominion
+all: playdom player unittestresults.out randomtestadventurer.out randomtestcard1.out randomtestcard2.out testdominion.out testdominion diffdominion tarantula shortrandcard1 shortrandcard2
 
 .PHONY: dumbClean
 
@@ -12,6 +12,9 @@ dumbClean:
 -include dumbClean
 
 almost_all: playdom player
+
+tarantula:
+	gcc -o tarantula tarantula.c -g $(CFLAGS)
 
 rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
@@ -103,6 +106,12 @@ randomtestcard1: dominionTestUtilities.o
 randomtestcard2: dominionTestUtilities.o
 	gcc -o randomtestcard2 randomtestcard2.c -g dominionTestUtilities.o dominion.o rngs.o $(CFLAGS)
 
+shortrandcard1: dominionTestUtilities.o
+	gcc -o shortrandcard1 shortrandcard1.c -g dominionTestUtilities.o dominion.o rngs.o $(CFLAGS)
+
+shortrandcard2: dominionTestUtilities.o
+	gcc -o shortrandcard2 shortrandcard2.c -g dominionTestUtilities.o dominion.o rngs.o $(CFLAGS)
+
 testdominion: dominionTestUtilities.o
 	gcc -o testdominion testdominion.c -g rngs.o dominionTestUtilities.o $(CFLAGS)
 
@@ -112,4 +121,4 @@ diffdominion:
 
 
 clean:
-	rm -f *.o *.out *.exe playdom.exe playdom test.exe diffdominion testdiff1 testdiff2 test player randomtestadventurer randomtestcard1 randomtestcard2 unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4 player.exe testInit testInit.exe *.gcov *.gcda *.gcno *.so *.a *.dSYM
+	rm -f *.o *.out *.exe playdom.exe playdom test.exe shortrandcard1 shortrandcard2 tarantula diffdominion testdiff1 testdiff2 test player randomtestadventurer randomtestcard1 randomtestcard2 unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4 player.exe testInit testInit.exe *.gcov *.gcda *.gcno *.so *.a *.dSYM
