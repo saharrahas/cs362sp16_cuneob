@@ -1,0 +1,17 @@
+Reporter: Braxton Cuneo
+
+Version (Commit Title): “Final Project Done!”
+
+Component: sea hag effect
+
+Priority: Low
+
+Severity: Low
+
+Status: New
+
+Assign To: johnandr (Andrew Johnson)
+
+Summary: If a player uses the card “sea hag”, players with empty decks will not receive a curse card, even if curse cards are available.
+
+Description: Initialize a game with 4 players, a seed of 20, and kingdom cards of 7 through 16, setting whoseturn to 1, giving player 1 a sea hag card, setting the curse supply count to 2, and setting the deck counts of players 2 and 3 to 0 as well as setting the discard counts of players 2 and 3 to 1 and 0 respectively. Once this has been done, have player 1 play the sea hag card. Player 2 will receive a curse card at the top of his deck and player 3 will not. In addition, player 0 will receive a curse card, which indicates that either player 3 is being skipped or the proper upward rotation for distributing curse cards is not observed. Either way, this breaks the rules of the sea hag card.

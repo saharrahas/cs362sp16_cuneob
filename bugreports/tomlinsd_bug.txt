@@ -1,0 +1,17 @@
+Reporter: Braxton Cuneo
+
+Version (Commit Title): “Update debugging.txt”
+
+Component: card buying function
+
+Priority: Moderate
+
+Severity: Moderate
+
+Status: New
+
+Assign To: tomlinsd (Dylan Tomlinson)
+
+Summary: If a player attempts to purchase a card from the supply which has been embargoed, they will not receive any curses.
+
+Description: Having set the number of embargo tokens on copper to 1 and the number of buy actions of the current player to 1 and ensuring that the player is in the buy phase, one executes buyCard with the first argument being copper and the second value being a pointer to the game state. Instead of the player’s discard gaining a new curse card, nothing happens, which means that the embargo card simply does nothing.

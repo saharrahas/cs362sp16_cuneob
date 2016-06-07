@@ -1,0 +1,17 @@
+Reporter: Braxton Cuneo
+
+Version (Commit Title): “Update README”
+
+Component: smithy card effect
+
+Priority: Moderate
+
+Severity: Moderate
+
+Status: New
+
+Assign To: pederson (Nicholas Pederson)
+
+Summary: If a player uses the card “smithy”, the 5 cards are added to the player’s hand rather than 3 cards. 
+
+Description: After initializing a game of Dominion with 2 players, a seed of 20, and kingdom cards 7 through 16, and subsequently adding a smithy card to the top of the hand of the current player, one uses the function “playCard” on that inserted smithy card. The result of this action, instead of increasing the size of the hand by 3, it increases it by 5, completely exhausting the player’s deck.

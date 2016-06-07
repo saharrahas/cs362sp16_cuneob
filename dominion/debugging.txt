@@ -1,0 +1,26 @@
+///   debugging.txt   ///
+
+
+The symptoms:
+
+Ever since I began working on and with a full random dominion player, I had troubles with random points in execution which would simply hang. It was not a particularly common error, either. It only seemed to affect runs with certain seeds, but for those seeds it would always affect them at the same point in execution. 
+The suspicion:
+
+Of course, the first culprit that comes to mind when one considers a hanging program is an infinite loop, but knowing that an error is somewhere in a while loop is a far ways away from being able to pinpoint its location. This is where I applied Agan’s first principal for debugging, “understand the system.” I was aware that, since the hanging error was rare, the function which does the hanging must be called up comparatively infrequently. While I had not memorized the code from top to bottom, I knew that the most infrequently used sections of code in dominion.c would be that of card effects. Pretty much any other section of code would be part of the main “backbone” of the game, and would be called a few dozen times in the average game.
+
+
+The investigation:
+
+At this point, I began applying Agan’s second principal for debugging “make it fail.” Since trying to solve a problem that one cannot reproduce is needlessly hard, I first found a seed which produced the hanging behavior so that I could have a good place to start (the seed was 56, if you were wondering). So, by using GDB in conjunction with my random tester operating off of that seed, I only had to wait for it to begin hanging, halt the execution of the code, and submit a “where” command to find the general region of the loop. In this case, the execution of dominion was hanging in some code inside the effect for the card “feast.”
+
+However, before I went off to fix the problem, I first applied Agan’s seventh principal of debugging “check the plug.” I could not simply assume based off of one case that all of these hangs were the result of a loop in the card feast. So, I searched around more and found 3 or 4 other seeds that also exhibited hanging behavior. From there, I did the same process using GDB with each of these seeds, and was able to confirm with some reasonable certainty that feast seems to be the only section of code causing the issue at hand.
+
+
+The code:
+
+After having my suspicions confirmed, I finally applied Agan’s third principal of debugging, “quit thinking and look.” Considering faulty code can only go so far and needs to be followed by actually searching for and analyzing the faulty code. So, I opened up dominion.c and scrolled down to the portion of the code involved with the card effect of feast. There, I found that, for several cases in feast, such as erroneously selecting a card that was too expensive or no longer in the supply, one could not break out of a while loop as the conditional permitting so excluded those cases. As far as I could tell, it seemed that whoever wrote it was planning on eventually adding some code that would re-prompt for input, but never did, thus making the loop inescapable.
+
+
+The fix:
+
+It would have been too much of a hassle to circumvent the pre-existing input methods to install a jury-rigged input for this one section of code, not to mention the sort of confusion it may cause. So, for these specific cases, I just added some statements to break out of the loop and had the player’s current number of actions go up by one to balance out the fact that this action didn’t count.

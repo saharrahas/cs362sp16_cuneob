@@ -1,0 +1,81 @@
+///   tarantula.txt   ///
+
+
+Tarantula: Principals, Use, and Implementation
+
+
+
+The main idea behind Tarantula is that code which is executed more by failing tests than passing tests is more likely to contain a fault, so by running a lot of tests and tallying the number of times each line was covered by a passing test vs a failing test, one can give a “suspiciousness” rating for each line and investigate the most suspicious lines first when looking for faults.
+
+
+
+A brief forward:
+
+For the sake of clarifying the anecdote to follow and so that the reader may themselves be able to use my implementation of tarantula, the following is a brief breakdown of what a command using my implementation should look like:
+
+tarantula <test program> <gcov target> <source file> <executions> < thresh hold> <seed>
+
+- The <test program> is the program which tests the code in the source file. This program should accept a single integer as a seed to define its pseudo-random behavior. In addition, this program should return 1 when its test(s) have failed, and zero if all of them have passed.
+
+- The <gcov target> is the source file that tarantula will target with gcov to yield coverage files. This is delineated from the <source file>, which is the source file whose coverage will be analyzed, because, in some cases, gcov will not allow one to yield coverage directly from a source file, but only through a source file including that file.
+
+- The <executions> is simply the number of executions of the testing program that tarantula will use
+
+- The <thresh hold> is the minimum suspiciousness rating that an observed line has to have for tarantula to report it to the user.
+
+- The <seed> is simply the integer used to seed the random number generator which will seed each run of the test program
+
+
+
+Using Tarantula to Debug Dominion.c:
+
+In my Dominion code, one problem which has persisted since the first assignment was the fact that, when using steward and taking the option to increase the coins at one’s disposal by 2, the amount of coins frequently does not increase by two.
+
+In order to track down this bug properly, I first needed a program which would randomly generate a game state, attempt to use the steward card, and report back with a 1 for a failed test and a 0 for a passed one. To those ends, I already had a program which was most of the way there. 
+
+As part of assignment 2, I had made a random tester for steward which would attempt to use the card 1000 times and report back its findings. Simply by reducing that 1000 uses to 1 use of the card and adding in a statement that returns 1 if an error was detected, I now had just the tester I was looking for. After compiling the program, “shortrandcard2”, along with a few others for the reader to use when testing my implementation of tarantula, “shortrandcard1” and “shortrandad”, I used it with my tarantula implementation using the following command:
+
+
+“tarantula shortrandcard2 dominion.c dominion.c 500 0.51 42”
+
+
+and yielded the following output:
+
+
+“
+--- Most Suspicious to Least Suspicious Lines ( Suspicion >= 0.51 )---
+
+
+   1033: 0.905093
+   1433: 0.743346
+   1031: 0.594225
+   1506: 0.564741
+   373: 0.514313
+   374: 0.514313
+
+ - - - - - - - - - - - - - - - - - - - - - - -
+“
+
+The main subjects of interest here are the top two lines: 1033 and 1433. The former corresponds with the line which actually increments the coins for steward, and the latter corresponds to the line in which the game handles the special case where one is discarding the last card in one’s hand. As far as relevancy goes, both are at opposite ends of the spectrum. It would be hard to encounter a bug involving a certain action by a card if that section of code is never encountered, so of course the incrementing statement in steward is included. However, discarding the last card in one’s hand should not affect the value of coins for the player if this last card was not a treasure card.
+
+
+What was also interesting about the incrementation statement is that it is so simple that one could not but conclude that whatever concept is being missed with its implementation must be something particularly basic. It is for this reason that I investigated updatecoins(), the function in charge of ensuring that the money at the player’s disposal accords with the cards they have and whatever bonus they received from cards they have played. It was then that I realized the error of the statement.
+Before fixing it, the statement on line 1033 looked like this:
+
+
+“game->coins = game->coins + 2;”
+
+
+What is crucial to realize is that when updatecoins() is executed, it resets coins and adds to it based off of the treasure cards in the player’s hand. After that, updatecoins() adds in an integer called bonus which accounts for the bonus coins given by played cards. The crucial error of line 1033 is that it should have incremented bonus rather than coins, like so:
+
+
+"bonus = bonus + 2;"
+
+
+But what of line 1433? It turns out that my original random tester, “randomtestcard2”, was somewhat buggy as well. In order to keep things simple, I would keep incrementing player’s action values and adding steward cards to their hand to ensure they could keep playing. From there I would randomly advance the turns forward. This would mean that, a lot of the time, my players could run out of cards, and my random tester would then have to rip them out of the buy phase and reinitialize their turn so they could continue playing, resetting their coin count along the way.  
+
+
+
+I would not classify this an ideal example of the power tarantula can have in localizing bugs,  particularly if one excludes the second bug, as it is not in dominion.c and hence does not technically fall under the purview of this writing prompt. This being said, it can also be very telling not simply where tarantula is showing the most suspicion, but also where it is not. The only reason I knew to begin re-evaluating my understanding of how coins are counted in dominion was that the few lines that were covered were so simple and sensible. Had tarantula begun to throw lines that were part of a convoluted conditional statement nested into a while loop, I may have spent a good deal of time tinkering with it before I even began to consider that it may have been an error in foundational thinking. So, if anything, this example shows the hidden power of tarantula in eliminating wild goose chases before they start.
+
+
